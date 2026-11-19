@@ -405,5 +405,212 @@ document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 render();updateCart();
 </script>
+ 
+<!-- ANGELA STORE CHATBOT -->
+<style>
+#asChatButton {
+  position: fixed;
+  right: 18px;
+  bottom: 20px;
+  z-index: 9999;
+  background: #49394f;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 19px;
+  font-weight: bold;
+  box-shadow: 0 4px 15px #0002;
+}
+
+#asChatBox {
+  display: none;
+  position: fixed;
+  right: 15px;
+  bottom: 82px;
+  width: min(340px, calc(100vw - 30px));
+  height: 440px;
+  max-height: 70vh;
+  z-index: 9999;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 5px 25px #0003;
+  overflow: hidden;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+#asChatHeader {
+  background: #332b38;
+  color: white;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#asChatHeader small {
+  display: block;
+  color: #e6dce9;
+  margin-top: 4px;
+}
+
+#asChatClose {
+  background: transparent;
+  color: white;
+  border: 0;
+  font-size: 22px;
+}
+
+#asChatMessages {
+  flex: 1;
+  padding: 13px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.asChatMessage {
+  padding: 11px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  max-width: 85%;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.asChatBot {
+  background: #f0ebf2;
+}
+
+.asChatUser {
+  background: #e9d9ed;
+  margin-left: auto;
+}
+
+#asChatForm {
+  display: flex;
+  padding: 10px;
+  gap: 7px;
+  border-top: 1px solid #eee;
+}
+
+#asChatInput {
+  min-width: 0;
+  flex: 1;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+}
+
+#asChatForm button {
+  background: #49394f;
+  color: white;
+  border: 0;
+  padding: 0 13px;
+  border-radius: 9px;
+}
+</style>
+
+<button id="asChatButton">💬 Chat Admin</button>
+
+<div id="asChatBox">
+  <div id="asChatHeader">
+    <div>
+      <strong>ANGELA STORE</strong>
+      <small>Customer Service Assistant</small>
+    </div>
+    <button id="asChatClose">×</button>
+  </div>
+
+  <div id="asChatMessages">
+    <div class="asChatMessage asChatBot">
+      Halo! Selamat datang di Angela Store.
+      Ada yang bisa saya bantu?
+    </div>
+  </div>
+
+  <form id="asChatForm">
+    <input id="asChatInput"
+      placeholder="Tulis pertanyaan..."
+      autocomplete="off">
+    <button type="submit">Kirim</button>
+  </form>
+</div>
+
+<script>
+(function () {
+  const button = document.getElementById("asChatButton");
+  const box = document.getElementById("asChatBox");
+  const close = document.getElementById("asChatClose");
+  const form = document.getElementById("asChatForm");
+  const input = document.getElementById("asChatInput");
+  const messages = document.getElementById("asChatMessages");
+
+  button.addEventListener("click", function () {
+    box.style.display = "flex";
+  });
+
+  close.addEventListener("click", function () {
+    box.style.display = "none";
+  });
+
+  function addMessage(text, sender) {
+    const message = document.createElement("div");
+    message.className = "asChatMessage " + sender;
+    message.textContent = text;
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function getReply(text) {
+    const msg = text.toLowerCase();
+
+    if (msg.includes("halo") || msg.includes("hai")) {
+      return "Halo juga! Selamat datang di Angela Store. Ada yang ingin ditanyakan?";
+    }
+
+    if (msg.includes("harga")) {
+      return "Harga setiap aplikasi berbeda. Silakan lihat katalog produk di website kami.";
+    }
+
+    if (msg.includes("garansi")) {
+      return "Ketentuan garansi berbeda pada setiap paket. Periksa keterangan garansi sebelum membeli ya!";
+    }
+
+    if (msg.includes("spotify")) {
+      return "Kami menyediakan beberapa pilihan paket Spotify. Silakan cek katalog untuk melihat harga dan garansinya.";
+    }
+
+    if (msg.includes("viu")) {
+      return "Kami menyediakan paket Viu Private Anti Limit. Silakan cek katalog untuk pilihan paket dan harganya.";
+    }
+
+    if (msg.includes("beli") || msg.includes("pesan")) {
+      return "Silakan pilih produk, masukkan ke keranjang, lalu lanjutkan checkout.";
+    }
+
+    if (msg.includes("admin")) {
+      return "Silakan hubungi admin melalui tombol WhatsApp di website.";
+    }
+
+    return "Maaf, saya belum memahami pertanyaan tersebut. Kamu bisa mencoba kata kunci produk, harga, garansi, atau admin.";
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, "asChatUser");
+    input.value = "";
+
+    setTimeout(function () {
+      addMessage(getReply(text), "asChatBot");
+    }, 400);
+  });
+})();
+</script>
+ 
 </body>
 </html>
